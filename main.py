@@ -14,6 +14,11 @@ pygame.display.set_caption("Action Game")
 clock = pygame.time.Clock()
 FPS = 60
 
+#define colors
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+WHITE = (255, 255, 255)
+
 #load bg image
 bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
 
@@ -21,6 +26,13 @@ bg_image = pygame.image.load("assets/images/background/background.jpg").convert_
 def load_bg():
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     screen.blit(scaled_bg, (0, 0))
+
+#function for showing fighter health bars
+def draw_health_bar(health, x, y):
+    ratio = health / 100
+    pygame.draw.rect(screen, WHITE, (x - 2, y - 2, 404, 34))
+    pygame.draw.rect(screen, RED, (x, y, 400, 30))
+    pygame.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
     
 #create two fighters
 figther_1 = Fighter(200, 310)
@@ -35,6 +47,10 @@ while run:
     
     #load bg
     load_bg()
+    
+    #show player health
+    draw_health_bar(figther_1.health, 20, 20)
+    draw_health_bar(figther_2.health, 580, 20)
     
     #move fighters
     figther_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, figther_2)
