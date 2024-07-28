@@ -22,6 +22,9 @@ WHITE = (255, 255, 255)
 #define game variables
 intro_count = 3
 last_count_update = pygame.time.get_ticks()
+score = [0, 0] #player score. [P1, P2]
+round_over = False
+ROUND_OVER_COOLDOWN = 2000
 
 #define fighter variables
 WARRIOR_SIZE = 162
@@ -39,6 +42,9 @@ bg_image = pygame.image.load("assets/images/background/background.jpg").convert_
 #load spritesheets
 warrior_sheet = pygame.image.load("assets/images/warrior/Sprites/warrior.png").convert_alpha()
 wizard_sheet = pygame.image.load("assets/images/wizard/Sprites/wizard.png").convert_alpha()
+
+#load victory image
+victory_img = pygame.image.load("assets/icons/victory.png").convert_alpha()
 
 #define number of steps in each animation
 WARRIOR_ANIMATION_STEPS = [10, 8, 1, 7, 7, 3, 7]
@@ -83,12 +89,15 @@ while run:
     #show player health
     draw_health_bar(figther_1.health, 20, 20)
     draw_health_bar(figther_2.health, 580, 20)
+    draw_text("Player 1: " + str(score[0]), score_font, WHITE, 20, 60)
+    draw_text("Player 2: " + str(score[1]), score_font, WHITE, 580, 60)
+
     
     #update countdown timer
     if intro_count <= 0:
         #move fighters
-        figther_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, figther_2)
-        figther_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, figther_1)
+        figther_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, figther_2, round_over)
+        figther_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, figther_1, round_over)
     else:
         #display count timer
         draw_text(str(intro_count), count_font, YELLOW, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -104,6 +113,25 @@ while run:
     #draw fighters
     figther_1.draw(screen)
     figther_2.draw(screen)
+    
+    #check for player defeat
+    if round_over == False:
+        if figther_1.alive == False:
+            score[1] += 1
+            round_over = True
+            round_over_time = pygame.time.get_ticks()
+        elif figther_2.alive == False:
+            score[0] += 1
+            round_over = True
+            round_over_time = pygame.time.get_ticks()
+    else:
+        #display victory image
+        screen.blit(victory_img, (360, 150))
+        if pygame.time.get_ticks() - round_over_time > ROUND_OVER_COOLDOWN:
+            round_over = False
+            intro_count = 3
+            figther_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS)
+            figther_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS)
     
     #event handler
     for event in pygame.event.get():
