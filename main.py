@@ -74,6 +74,10 @@ while run:
     figther_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, figther_2)
     # figther_2.move(SCREEN_WIDTH, SCREEN_HEIGHT)
     
+    #update fighters
+    figther_1.update()
+    figther_2.update()
+    
     #draw fighters
     figther_1.draw(screen)
     figther_2.draw(screen)
