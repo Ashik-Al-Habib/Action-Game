@@ -10,6 +10,10 @@ SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Action Game")
 
+#set framerate
+clock = pygame.time.Clock()
+FPS = 60
+
 #load bg image
 bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
 
@@ -26,8 +30,15 @@ figther_2 = Fighter(700, 310)
 run = True
 
 while run:
+    
+    clock.tick(FPS)
+    
     #load bg
     load_bg()
+    
+    #move fighters
+    figther_1.move(SCREEN_WIDTH)
+    # figther_2.move()
     
     #draw fighters
     figther_1.draw(screen)
