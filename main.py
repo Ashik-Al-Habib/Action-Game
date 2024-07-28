@@ -37,8 +37,8 @@ while run:
     load_bg()
     
     #move fighters
-    figther_1.move(SCREEN_WIDTH, SCREEN_HEIGHT)
-    # figther_2.move()
+    figther_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, figther_2)
+    # figther_2.move(SCREEN_WIDTH, SCREEN_HEIGHT)
     
     #draw fighters
     figther_1.draw(screen)
